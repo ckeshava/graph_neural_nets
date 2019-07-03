@@ -23,7 +23,7 @@ random_seed = 23
 radius = 1 # extent of possible communication
 MAX_NODES = 1000
 learning_rate = 0.7
-epochs = 1000
+epochs = 3
 display_cost_period = 200
 
 
