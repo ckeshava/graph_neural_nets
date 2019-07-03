@@ -33,7 +33,7 @@ display_cost_period = 200
 
 def plot_learning(cost_history):
     plt.plot(cost_history)
-    plt.xlabel('Epochs')
+    plt.xlabel('Number of Graphs')
     plt.ylabel('Mean Squared Error')
     plt.title('Learning Curve')
     plt.show()
