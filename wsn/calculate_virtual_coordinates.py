@@ -66,14 +66,17 @@ def normalize_adj(adj):
 
     d_inv_sqrt = np.power(rowsum, -0.5).flatten()
     d_inv_sqrt[np.isinf(d_inv_sqrt)] = 0.
-    d_mat_inv_sqrt = sp.diags(d_inv_sqrt)
+    d_mat_inv_sqrt = np.diag(d_inv_sqrt)
     # return adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()
     return adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt)
+    # return np.zeros((adj.shape[0], adj.shape[0]))
 
 
 # function ge_VC will be called by external modules to calculate VC
 def distance(x, y, dist_matrix):
-    return tf.math.sqrt((dist_matrix[x, 0] - dist_matrix[y, 0])**2 + (dist_matrix[x, 1] - dist_matrix[y, 1])**2) 
+    # x = tf.cast(x, dtype=tf.float64)
+    # y = tf.cast(y, dtype=tf.float64)
+    return np.sqrt((dist_matrix[x, 0] - dist_matrix[y, 0])**2 + (dist_matrix[x, 1] - dist_matrix[y, 1])**2) 
     
 def is_neighbour(x, y, dist_matrix):
     return distance(x, y, dist_matrix) <= 1
@@ -160,5 +163,6 @@ def get_VC(num_of_nodes):
     dist_matrix = test_phy_coordinates(num_of_nodes)
     anchors = select_anchor_nodes(dist_matrix)
 
-    print('DEBUG: Anchor list: {}'.format(anchors))
-    return tf.convert_to_tensor(dist_matrix, dtype=tf.float64), tf.convert_to_tensor(calculate_shortest_hops(dist_matrix, anchors), dtype=tf.float64)
+    # print('DEBUG: get_VC:  Anchor list: {}'.format(anchors))
+    # return tf.convert_to_tensor(dist_matrix, dtype=tf.float64), calculate_shortest_hops(dist_matrix, anchors)
+    return dist_matrix, calculate_shortest_hops(dist_matrix, anchors)
