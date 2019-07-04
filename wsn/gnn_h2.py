@@ -96,7 +96,6 @@ with g.as_default():
 
 # In[ ]:
 
-print('DEBUG: Constructed the Graph!')
 
 cost_history = []
 with tf.Session(graph=g) as sess:
@@ -137,15 +136,15 @@ with tf.Session(graph=g) as sess:
 # In[ ]:
 
 
-plot_learning(cost_history)
-
-with open('outfile', 'wb') as fp:
+with open('h_2', 'wb') as fp:
     pickle.dump(cost_history, fp)
 
 # # to read it back
 # with open ('outfile', 'rb') as fp:
 #     itemlist = pickle.load(fp)
 
+
+# plot_learning(cost_history)
 
 
 # In[ ]:
