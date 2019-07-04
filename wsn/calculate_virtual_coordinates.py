@@ -159,8 +159,8 @@ def select_anchor_nodes(dist_matrix):
     return anchor_list
 
 def get_VC(num_of_nodes):
-    # dist_matrix = generate_physical_coordinates(num_of_nodes)
-    dist_matrix = test_phy_coordinates(num_of_nodes)
+    dist_matrix = generate_physical_coordinates(num_of_nodes)
+    # dist_matrix = test_phy_coordinates(num_of_nodes)
     anchors = select_anchor_nodes(dist_matrix)
 
     # print('DEBUG: get_VC:  Anchor list: {}'.format(anchors))

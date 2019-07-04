@@ -24,8 +24,11 @@ def get_etp_without_rotation(A, B):
         # A = tf.reshape(A, (-1, 2))
 
         n = A.get_shape().as_list()[0]
-        print(type(n))
-        print(n)
+        # print(type(n))
+        # print(n)
+
+        A = tf.cast(A, dtype=tf.float32)
+        B = tf.cast(B, dtype=tf.float32)
 
 
         count_invs = 0
@@ -35,8 +38,8 @@ def get_etp_without_rotation(A, B):
                 for j in range(0, n):
 
                         # check for inversions along X-axis                        
-                        count_invs = tf.cond(A[i, 0] < A[j, 0], lambda: func1(B[j, 0], B[i, 0], count_invs), lambda: dummy_func())
-                        count_invs = tf.cond(A[i, 0] > A[j, 0], lambda: func2(B[j, 0], B[i, 0], count_invs), lambda: dummy_func())
+                        count_invs = tf.cond(A[i-1, 0] < A[j-1, 0], lambda: func1(B[j-1, 0], B[i-1, 0], count_invs), lambda: dummy_func())
+                        count_invs = tf.cond(A[i-1, 0] > A[j-1, 0], lambda: func2(B[j-1, 0], B[i-1, 0], count_invs), lambda: dummy_func())
 
                         # check for inversions along Y-axis
                         count_invs = tf.cond(A[i, 1] < A[j, 1], lambda: func1(B[j, 1], B[i, 1], count_invs), lambda: dummy_func())
@@ -60,6 +63,8 @@ def get_best_etp(A, B):
                 rot_matrix = np.array([[np.cos(np.radians(x)), -np.sin(np.radians(x))], [np.sin(np.radians(x)), np.cos(np.radians(x))]])
                 rot_matrix = tf.convert_to_tensor(rot_matrix, dtype=tf.float32)
                 # temp = get_etp_without_rotation(A, tf.matmul(B, tf.cast(rot_matrix, dtype=tf.float64)))
+                A = tf.cast(A, dtype=tf.float32)
+                B = tf.cast(B, dtype=tf.float32)
                 temp = get_etp_without_rotation(A, tf.matmul(B, rot_matrix))
 
                 final_etp = tf.cond(temp < final_etp, lambda: temp, lambda: tf.cast(final_etp, dtype=tf.float64))
