@@ -85,6 +85,8 @@ with g.as_default():
 
     
     out_1 = tf.matmul(tf.matmul(A_caret, input_layer), W_0)
+    
+    
     out_2 = tf.matmul(tf.matmul(A_caret, out_1), W_1)
     out_3 = tf.matmul(tf.matmul(A_caret, out_2), W_2)
     
