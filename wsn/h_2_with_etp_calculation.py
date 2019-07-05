@@ -85,7 +85,9 @@ with g.as_default():
 
     
     out_1 = tf.matmul(tf.matmul(A_caret, input_layer), W_0)
+    out_1 = tf.nn.relu(out_1)
     out_2 = tf.matmul(tf.matmul(A_caret, out_1), W_1)
+    out_2 = tf.nn.relu(out_2)
     out_3 = tf.matmul(tf.matmul(A_caret, out_2), W_2)
     
     
@@ -126,7 +128,6 @@ with tf.Session(graph=g) as sess:
         A_caret_matrix = cvc.normalize_adj(adj_matrix + np.eye(adj_matrix.shape[0]))
         
         
-
         curr_cost = sess.run(cost, feed_dict={input_layer: inps,
                                         physical_coordinates: phy_coord,
                                         adj: adj_matrix,
@@ -143,7 +144,7 @@ with tf.Session(graph=g) as sess:
 
         print('Epoch: {}\t cost: {}\t'.format(i, curr_cost))
         
-    save_path = saver.save(sess, "model_h_2_g_1000_alpha_7.ckpt")
+    save_path = saver.save(sess, "./model_h_2_g_1000_alpha_7.ckpt")
     print("Model saved in path: {}".format(save_path))
         
         

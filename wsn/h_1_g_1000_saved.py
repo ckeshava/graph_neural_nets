@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from random import seed
 from random import randint
 seed(23)
+import pickle
+
 
 C = 5 # maximum number of anchors
 H = 500 # size of hidden filters
@@ -20,7 +22,7 @@ F = 2 # Final dimension of coordinates
 random_seed = 23
 radius = 1 # extent of possible communication
 MAX_NODES = 10
-learning_rate = 0.7
+learning_rate = 0.2
 epochs = 1000
 display_cost_period = 200
 
@@ -119,8 +121,8 @@ with tf.Session(graph=g) as sess:
 
 
         cost_history.append(curr_cost)
-        if not i%display_cost_period:
-            plot_learning(cost_history)
+#        if not i%display_cost_period:
+#            plot_learning(cost_history)
 
         print('Epoch: {}\t cost: {}\t ETP: {}'.format(i, curr_cost, curr_etp.eval()))
         
@@ -138,7 +140,7 @@ with tf.Session(graph=g) as sess:
 # In[ ]:
 
 
-plot_learning(cost_history)
+#plot_learning(cost_history)
 
 
 # In[ ]:
