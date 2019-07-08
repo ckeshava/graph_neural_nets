@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[11]:
 
 
 #!/usr/bin/env python
@@ -29,9 +29,10 @@ F = 2 # Final dimension of coordinates
 random_seed = 23
 radius = 1 # extent of possible communication
 MAX_NODES = 1000
-learning_rate = 0.7
+learning_rate = 0.2
 epochs = 1000
-display_cost_period = 200
+display_cost_period = 10
+num_iter = 5
 
 
 # In[2]:
@@ -56,19 +57,19 @@ with g.as_default():
                                       mean=0.0,
                                       stddev=0.1,
                                       dtype=tf.float32,
-                                      seed=random_seed))
+                                      seed=random_seed), name='wt_1')
     
     W_1 = tf.Variable(tf.truncated_normal(shape=(H1, H2),
                                   mean=0.0,
                                   stddev=0.1,
                                   dtype=tf.float32,
-                                  seed=random_seed))
+                                  seed=random_seed), name='wt_2')
 
     W_2 = tf.Variable(tf.truncated_normal(shape=(H2, F),
                                     mean=0.0,
                                     stddev=0.1,
                                     dtype=tf.float32,
-                                    seed=random_seed))
+                                    seed=random_seed), name='wt_3')
     
 
     input_layer = tf.placeholder(tf.float32, [None, C], # INPUT: num_of_nodes X VC_values
@@ -85,24 +86,18 @@ with g.as_default():
 
     
     out_1 = tf.matmul(tf.matmul(A_caret, input_layer), W_0)
-<<<<<<< HEAD
-    
-    
-=======
     out_1 = tf.nn.relu(out_1)
->>>>>>> a1166f458327eeac809af131f831ded75afdcbb1
     out_2 = tf.matmul(tf.matmul(A_caret, out_1), W_1)
     out_2 = tf.nn.relu(out_2)
+    
     out_3 = tf.matmul(tf.matmul(A_caret, out_2), W_2)
     
-    
-#     cost = etp.get_best_etp(out_2, physical_coordinates)
-#     cost = etp.get_best_etp(out_2, physical_coordinates)
     
     cost = tf.losses.mean_squared_error(out_3, physical_coordinates)
     optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
     
     saver = tf.train.Saver()
+    
 
     
 
@@ -113,7 +108,7 @@ with g.as_default():
 
 
 
-# In[2]:
+# In[12]:
 
 
 cost_history = []
@@ -121,6 +116,7 @@ etp_history = []
 with tf.Session(graph=g) as sess:
     # `sess.graph` provides access to the graph used in a `tf.Session`.
     writer = tf.summary.FileWriter("./graphs", sess.graph)
+    saver.restore(sess, 'model_h_2_g_1000_alpha_7.ckpt')
 
     # Perform your computation...
     for i in range(epochs):
@@ -132,24 +128,26 @@ with tf.Session(graph=g) as sess:
         adj_matrix = cvc.get_adj(phy_coord)
         A_caret_matrix = cvc.normalize_adj(adj_matrix + np.eye(adj_matrix.shape[0]))
         
-        
-        curr_cost = sess.run(cost, feed_dict={input_layer: inps,
-                                        physical_coordinates: phy_coord,
-                                        adj: adj_matrix,
-                                        A_caret: A_caret_matrix})
-        
-#         curr_etp = etp.get_best_etp(curr_out, phy_coord)
-#         etp_history.append(curr_etp)
+        sum_cost = 0
+        for _ in range(num_iter):
+            curr_cost = sess.run(cost, feed_dict={input_layer: inps,
+                                            physical_coordinates: phy_coord,
+                                            adj: adj_matrix,
+                                            A_caret: A_caret_matrix})
+            sum_cost += curr_cost 
 
         
-        cost_history.append(curr_cost)
-
+        cost_history.append(sum_cost/num_iter)
+        
 #         if not i%display_cost_period:
 #             plot_learning(cost_history)
-
-        print('Epoch: {}\t cost: {}\t'.format(i, curr_cost))
         
-    save_path = saver.save(sess, "./model_h_2_g_1000_alpha_7.ckpt")
+    
+
+
+        print('Epoch: {}\t cost: {}\t'.format(i, sum_cost/num_iter))
+        
+    save_path = saver.save(sess, "model_h_2_g_1000_alpha_7.ckpt")
     print("Model saved in path: {}".format(save_path))
         
         
@@ -162,8 +160,14 @@ with tf.Session(graph=g) as sess:
 # In[ ]:
 
 
-with open('h_2_g_1000_alpha_7_cost_history', 'wb') as fp:
+with open('h_2', 'wb') as fp:
     pickle.dump(cost_history, fp)
+
+
+# In[10]:
+
+
+# plot_learning(cost_history)
 
 
 # In[ ]:
