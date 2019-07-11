@@ -13,6 +13,8 @@ This is an attempt to assign coodinates to nodes within a Wireless Sensor Networ
 instead of starting fresh from scratch.
 3. The architecture of the model can be fund at `wsn/model_arch.png`
 4. `wsn/learning_curves/` folder contains the matplotlib plots of cost-histories. The cost-histories themselves can be found at `wsn/cost_histories/` 
+5. `wsn/etp.py` : This file contains the calculation of ETP cost as defined by Dhanapala et al, IEEE/ACM TON, 2014.
+6. `wsn/calculate_virtual_coordinates.py` : This file contains the code to generate a geographic coordinates initially, then generates virtual cooadinates through flooding of the network.
 
 ## References:
 1. Kipf, Thomas N., and Max Welling. "Semi-supervised classification with graph convolutional networks." 
