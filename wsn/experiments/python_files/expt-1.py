@@ -124,10 +124,10 @@ with tf.Session(graph=g) as sess:
     writer = tf.summary.FileWriter("./graphs", sess.graph)
     #saver.restore(sess, 'model_h_2_g_1000_alpha_7.ckpt')
 
-    
+    init_op = tf.global_variables_initializer()
+    sess.run(init_op)
+
     for i in range(epochs):
-        init_op = tf.global_variables_initializer()
-        sess.run(init_op)
         
 #         phy_coord, inps = cvc.get_VC(randint(10, MAX_NODES))
 #         adj_matrix = cvc.get_adj(phy_coord)

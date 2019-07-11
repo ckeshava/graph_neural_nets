@@ -116,12 +116,14 @@ etp_history = []
 with tf.Session(graph=g) as sess:
     # `sess.graph` provides access to the graph used in a `tf.Session`.
     writer = tf.summary.FileWriter("./graphs", sess.graph)
-    saver.restore(sess, 'model_h_2_g_1000_alpha_7.ckpt')
+#     saver.restore(sess, 'model_h_2_g_1000_alpha_7.ckpt')
+    
+    init_op = tf.global_variables_initializer()
+    sess.run(init_op)
 
     # Perform your computation...
     for i in range(epochs):
-        init_op = tf.global_variables_initializer()
-        sess.run(init_op)
+        
         
 #         phy_coord, inps = cvc.get_VC(randint(10, MAX_NODES))
         phy_coord, inps = cvc.get_VC(randint(10, MAX_NODES))
@@ -139,16 +141,17 @@ with tf.Session(graph=g) as sess:
         
         cost_history.append(sum_cost/num_iter)
         
-#         if not i%display_cost_period:
+        if not i%display_cost_period:
 #             plot_learning(cost_history)
+            save_path = saver.save(sess, "model_h_2_g_1000_alpha_7_july11.ckpt")
+            print("Model saved in path: {}".format(save_path))
         
     
 
 
         print('Epoch: {}\t cost: {}\t'.format(i, sum_cost/num_iter))
         
-    save_path = saver.save(sess, "model_h_2_g_1000_alpha_7.ckpt")
-    print("Model saved in path: {}".format(save_path))
+    
         
         
         
@@ -160,7 +163,7 @@ with tf.Session(graph=g) as sess:
 # In[ ]:
 
 
-with open('h_2', 'wb') as fp:
+with open('cost_history_july11', 'wb') as fp:
     pickle.dump(cost_history, fp)
 
 
