@@ -1,12 +1,6 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 
-# In[11]:
-
-
-#!/usr/bin/env python
-# coding: utf-8
-# Two hidde layer network
 # In[1]:
 
 
@@ -28,9 +22,9 @@ H2 = 500 # size of hidden filters
 F = 2 # Final dimension of coordinates
 random_seed = 23
 radius = 1 # extent of possible communication
-MAX_NODES = 1000
+MAX_NODES = 20
 learning_rate = 0.2
-epochs = 1000
+epochs = 20
 display_cost_period = 10
 num_iter = 5
 
@@ -46,7 +40,8 @@ def plot_learning(cost_history):
     plt.show()
 
 
-# In[3]:
+
+# In[2]:
 
 
 g = tf.Graph()
@@ -111,54 +106,46 @@ with g.as_default():
 # In[12]:
 
 
+
+# In[4]:
+
+
+with open('max_1000_min_200_graphs_100_area_200.pickle', 'rb') as fp:
+    data = pickle.load(fp)
+
+
+# In[ ]:
+
+
 cost_history = []
 etp_history = []
 with tf.Session(graph=g) as sess:
-    # `sess.graph` provides access to the graph used in a `tf.Session`.
+    
     writer = tf.summary.FileWriter("./graphs", sess.graph)
     #saver.restore(sess, 'model_h_2_g_1000_alpha_7.ckpt')
 
-    # Perform your computation...
+    
     for i in range(epochs):
         init_op = tf.global_variables_initializer()
         sess.run(init_op)
         
-        phy_coord, inps = cvc.get_VC(randint(10, MAX_NODES))
-        adj_matrix = cvc.get_adj(phy_coord)
-        A_caret_matrix = cvc.normalize_adj(adj_matrix + np.eye(adj_matrix.shape[0]))
+#         phy_coord, inps = cvc.get_VC(randint(10, MAX_NODES))
+#         adj_matrix = cvc.get_adj(phy_coord)
+#         A_caret_matrix = cvc.normalize_adj(adj_matrix + np.eye(adj_matrix.shape[0]))
+        print('DEBUG: Calculated all inputs')
+        output_1 = sess.run(out_3, feed_dict={input_layer: data[i]['VC'],
+                                            physical_coordinates: data[i]['PC'],
+                                            adj: data[i]['Adj'],
+                                            A_caret: data[i]['Lap']})
         
-        output_1 = sess.run(out_3, feed_dict={input_layer: inps,
-                                            physical_coordinates: phy_coord,
-                                            adj: adj_matrix,
-                                            A_caret: A_caret_matrix})
-        #print('output of untrained neural network : {}'.format(output_1))
 
-        print('Epoch: {}\t ETP-1(untrained neural network) : {}'.format(i, etp.get_best_etp(output_1, phy_coord)))
-
-        
-               
-        
-    
-
-
-        
-        
-        
-        
-            
-
+        print('Epoch: {}\t ETP-1(untrained neural network) : {}'.format(i, etp.get_best_etp(output_1, data[i]['PC'])))
     writer.close()
 
 
+# In[ ]:
 
 
 with open('h_2', 'wb') as fp:
     pickle.dump(cost_history, fp)
-
-
-
-
-
-
-
 
