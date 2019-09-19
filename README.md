@@ -16,6 +16,10 @@ instead of starting fresh from scratch.
 5. `wsn/etp.py` : This file contains the calculation of ETP cost as defined by Dhanapala et al, IEEE/ACM TON, 2014.
 6. `wsn/calculate_virtual_coordinates.py` : This file contains the code to generate a geographic coordinates initially, then generates virtual cooadinates through flooding of the network.
 
+The below graph represents the performance of an untrained GNN versus the TPM algorithm proposed in the paper IEEE/ACM TON paper Dhanapala et al, 2014.
+
+![Graphs are generated in an i.i.d fashion from a uniform random distribution](results/tpm_vs_gnn.png)
+
 ## References:
 1. Kipf, Thomas N., and Max Welling. "Semi-supervised classification with graph convolutional networks." 
 arXiv preprint arXiv:1609.02907 (2016).
