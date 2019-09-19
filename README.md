@@ -20,6 +20,8 @@ The below graph represents the performance of an untrained GNN versus the TPM al
 
 ![Graphs are generated in an i.i.d fashion from a uniform random distribution](results/tpm_vs_gnn.png)
 
+I expect the accuracy will go down with further training of the GNN. But one factor that bothers me is that GNN takes the virtual coordinates matrix(X) as well as the adjacency matrix(Adj) as the input. The use of Adjacency matrix kind of undermines the point of GNNs because we can apply deterministic algorithms like Bellman Ford or the optimised versions. But GNNs are definitely better than those in terms of lower latency for computation time as well as lower memory consumption to store the weights of the network.
+
 ## References:
 1. Kipf, Thomas N., and Max Welling. "Semi-supervised classification with graph convolutional networks." 
 arXiv preprint arXiv:1609.02907 (2016).
